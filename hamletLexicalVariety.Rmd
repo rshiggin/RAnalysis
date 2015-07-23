@@ -1,9 +1,4 @@
----
-title: "Hamlet Lexical Variety"
-author: "CyberDH"
-date: "2015"
-output: html_document
----
+## Hamlet Lexical Variety
 
 ***  
 ### Global parameters 
