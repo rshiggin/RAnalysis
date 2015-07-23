@@ -2,6 +2,6 @@
 
 Text Analysis with R   
 
-R Scripts and Notebooks   
+Demo R Scripts and Notebooks for computational analysis of literary texts.   
 
 View Notebooks in HTML: [cyberdh/ranalysis](http://www.indiana.edu/~cyberdh/ranalysis)
