@@ -1,9 +1,5 @@
----
-title: "Wuthering Heights and Jane Eyre Dispersion"
-author: "CyberDH"
-date: "2015"
-output: html_document
----
+
+## Wuthering Heights and Jane Eyre Dispersion
 
 ***  
 ### Jane Eyre 
