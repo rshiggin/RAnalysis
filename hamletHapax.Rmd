@@ -1,9 +1,5 @@
----
-title: "Hamlet Hapax"
-author: "CyberDH"
-date: "2015"
-output: html_document
----
+## Hamlet Hapax   
+
 Words that occur just once are often called _singletons_ (or even _onesies_), but they are more formally called _hapax legomena_ (_hapax_, for short). Here, the method measures lexical variety among play characters and scenes.  
 
 ***  
