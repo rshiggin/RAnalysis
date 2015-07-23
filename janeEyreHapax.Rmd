@@ -1,0 +1,68 @@
+---
+title: "Jane Eyre Hapax"
+author: "CyberDH"
+date: "2015"
+output: html_document
+---
+Words that occur just once are often called _singletons_ (or even _onesies_), but they are more formally called _hapax legomena_ (_hapax_, for short). Here, the method measures lexical variety among novel chapters.  
+
+***  
+### Global parameters 
+#### Set working directory
+```{r}
+setwd("~/cyberdh/HILT-demo")
+```   
+
+#### Include necessary packages for notebook
+```{r}
+library(knitr)
+library(markdown)
+library(rmarkdown)
+library(ggplot2)
+```   
+
+***   
+### Jane Eyre Hapax
+#### Prepare text data, broken into chunks by chapter
+```{r}
+text.janeEyre <- scan("janeEyre.txt", what="character", sep="\n")
+text.janeEyre <- c(text.janeEyre, "END")
+positions.janeEyre <- grep("^CHAPTER ", text.janeEyre)
+last.janeEyre <- length(text.janeEyre)
+positions.janeEyre <- c(positions.janeEyre, last.janeEyre)
+```
+
+#### Loop for calculating unique words by chapter 
+```{r}
+rawsl.janeEyre <- list()
+freqsl.janeEyre <- list()
+for (i in 1:length(positions.janeEyre)) {
+  if (i != length(positions.janeEyre)) {
+    number.janeEyre <- text.janeEyre[positions.janeEyre[i]]
+    start.janeEyre <- positions.janeEyre[i] +1
+    end.janeEyre <- positions.janeEyre[i+1] -1
+    chapter.janeEyre <- text.janeEyre[start.janeEyre:end.janeEyre]
+    wordsv.janeEyre <- tolower(paste(chapter.janeEyre, collapse= " "))
+    wordsl.janeEyre <- strsplit(wordsv.janeEyre, "\\W")
+    wordv.janeEyre <- unlist(wordsl.janeEyre)
+    wordv.janeEyre <- wordv.janeEyre[which(wordv.janeEyre != "")]
+    freqst.janeEyre <- table(wordv.janeEyre)
+    rawsl.janeEyre[[number.janeEyre]] <- freqst.janeEyre
+    freqst.rel.janeEyre <- 100*(freqst.janeEyre/sum(freqst.janeEyre))
+    freqsl.janeEyre[[number.janeEyre]] <- freqst.rel.janeEyre
+  }
+}
+```
+
+***
+#### Create barplot
+```{r}
+hapaxv.janeEyre <- sapply(rawsl.janeEyre, function(x) sum(x == 1))
+lengthsm.janeEyre <- do.call(rbind, lapply(rawsl.janeEyre,sum))
+percentage.janeEyre <- hapaxv.janeEyre / lengthsm.janeEyre
+barplot(percentage.janeEyre, beside = T, col="grey", main="Hapax by Chapter in Jane Eyre",names.arg=seq(1:length(rawsl.janeEyre)))
+```
+
+
+
+Acknowledgments: Code adapted from Matthew Jockers’ _Text Analysis with R for Students of Literature_.

@@ -1,0 +1,129 @@
+---
+title: "Wuthering Heights and Jane Eyre Dispersion"
+author: "CyberDH"
+date: "2015"
+output: html_document
+---
+
+***  
+### Jane Eyre 
+```{r}
+setwd("~/cyberdh/HILT-demo")
+library(knitr)
+library(markdown)
+library(rmarkdown)
+library(ggplot2)
+text.v <- scan("janeEyre.txt", what="character", sep="\n")
+janeEyre.v <- paste(text.v, collapse="  ")
+janeEyre.lower.v <- tolower(janeEyre.v)
+janeEyre.words <- strsplit(janeEyre.lower.v, "\\W")
+janeEyre.word.v <- unlist(janeEyre.words)
+not.blanks.v <- which(janeEyre.word.v != "")
+janeEyre.word.v <- janeEyre.word.v[not.blanks.v]
+text.position.v <- seq(1:length(janeEyre.word.v))
+```   
+
+***    
+```{r}
+love.v <- which(janeEyre.word.v == "love")
+w.count.v <- rep(NA, length(text.position.v))
+w.count.v[love.v] <- 1
+plot(w.count.v, main="Dispersion Plot of 'love' in Wuthering Heights", xlab="Text Location",
+        ylab="Love", type="h",ylim=c(0,1), yaxt='n')
+```
+
+***   
+```{r}
+death.v <- which(janeEyre.word.v == "death")
+w.count.v <- rep(NA, length(text.position.v))
+w.count.v[death.v] <- 1
+plot(w.count.v, main="Dispersion Plot of 'death' in Jane Eyre", xlab="Text Location",
+      ylab="Death", type="h", ylim=c(0,1), yaxt='n')
+```
+
+***   
+```{r}
+little.v <- which(janeEyre.word.v == "little")
+w.count.v <- rep(NA, length(text.position.v))
+w.count.v[little.v] <- 1
+plot(w.count.v, main="Dispersion Plot of 'little' in Jane Eyre", xlab="Text Location",
+     ylab="Little", type="h", ylim=c(0,1), yaxt='n')
+```
+
+***     
+```{r}
+happy.v <- which(janeEyre.word.v == "happy")
+w.count.v <- rep(NA, length(text.position.v))
+w.count.v[happy.v] <- 1
+plot(w.count.v, main="Dispersion Plot of 'happy' in Jane Eyre", xlab="Text Location", 
+     ylab="Happy", type="h", ylim=c(0,1), yaxt='n')
+```
+
+***     
+```{r}
+father.v <- which(janeEyre.word.v == "father")
+w.count.v <- rep(NA, length(text.position.v))
+w.count.v[father.v] <- 1
+plot(w.count.v, main="Dispersion Plot of 'father' in Jane Eyre", xlab="Text Location",
+     ylab="Father", type="h", ylim=c(0,1), yaxt='n')
+```   
+
+***
+### Wuthering Heights
+```{r}
+text.v <- scan("wutheringHeights.txt", what="character", sep="\n")
+wutheringHeights.v <- paste(text.v, collapse="  ")
+wutheringHeights.lower.v <- tolower(wutheringHeights.v)
+wutheringHeights.words <- strsplit(wutheringHeights.lower.v, "\\W")
+wutheringHeights.word.v <- unlist(wutheringHeights.words)
+not.blanks.v <- which(wutheringHeights.word.v != "")
+wutheringHeights.word.v <- wutheringHeights.word.v[not.blanks.v]
+text.position.v <- seq(1:length(wutheringHeights.word.v))
+```   
+
+***    
+```{r}
+love.v <- which(wutheringHeights.word.v == "love")
+w.count.v <- rep(NA, length(text.position.v))
+w.count.v[love.v] <- 1
+plot(w.count.v, main="Dispersion Plot of 'love' in Wuthering Heights", xlab="Text Location",
+        ylab="Love", type="h",ylim=c(0,1), yaxt='n')
+```
+
+***    
+```{r}
+death.v <- which(wutheringHeights.word.v == "death")
+w.count.v <- rep(NA, length(text.position.v))
+w.count.v[death.v] <- 1
+plot(w.count.v, main="Dispersion Plot of 'death' in Wuthering Heights", xlab="Text Location",
+      ylab="Death", type="h", ylim=c(0,1), yaxt='n')
+```
+
+***    
+```{r}
+little.v <- which(wutheringHeights.word.v == "little")
+w.count.v <- rep(NA, length(text.position.v))
+w.count.v[little.v] <- 1
+plot(w.count.v, main="Dispersion Plot of 'little' in Wuthering Heights", xlab="Text Location",
+     ylab="Little", type="h", ylim=c(0,1), yaxt='n')
+```
+
+***   
+```{r}
+happy.v <- which(wutheringHeights.word.v == "happy")
+w.count.v <- rep(NA, length(text.position.v))
+w.count.v[happy.v] <- 1
+plot(w.count.v, main="Dispersion Plot of 'happy' in Wuthering Heights", xlab="Text Location", 
+     ylab="Happy", type="h", ylim=c(0,1), yaxt='n')
+```
+
+***    
+```{r}
+father.v <- which(wutheringHeights.word.v == "father")
+w.count.v <- rep(NA, length(text.position.v))
+w.count.v[father.v] <- 1
+plot(w.count.v, main="Dispersion Plot of 'father' in Wuthering Heights", xlab="Text Location",
+     ylab="Father", type="h", ylim=c(0,1), yaxt='n')
+```
+
+Acknowledgments: Code adapted from Matthew Jockers’ _Text Analysis with R for Students of Literature_.

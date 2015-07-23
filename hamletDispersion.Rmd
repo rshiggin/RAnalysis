@@ -1,0 +1,129 @@
+---
+title: "Hamlet Dispersion"
+author: "CyberDH"
+date: "2015"
+output: html_document
+---
+
+***  
+### Global parameters 
+#### Set working directory
+```{r}
+setwd("~/cyberdh/HILT-demo")
+```   
+
+#### Include necessary packages for notebook
+```{r}
+library(knitr)
+library(markdown)
+library(rmarkdown)
+library(ggplot2)
+```   
+
+#### Load data (plaintext file), formatted by line breaks  
+```{r}
+text.v <- scan("hamlet.txt", what="character", sep="\n")
+```  
+
+***   
+### Prepare text data
+#### Collapse text into one string, leaving spaces " " between words 
+```{r}
+hamlet.v <- paste(text.v, collapse="  ")
+```   
+
+#### Convert text string to all lower-case letters
+```{r}
+hamlet.lower.v <- tolower(hamlet.v)
+```  
+
+#### Split (_strsplit_) big string into separate words
+```{r}
+hamlet.words <- strsplit(hamlet.lower.v, "\\W")
+```  
+
+#### Simplify items by reducing the list to a vector
+```{r}
+hamlet.word.v <- unlist(hamlet.words)
+```
+
+#### Eliminate blanks left by punctuation
+```{r}
+not.blanks.v <- which(hamlet.word.v != "")
+hamlet.word.v <- hamlet.word.v[not.blanks.v]
+```
+
+***   
+### Analysis
+#### Set all words into number sequence: position = "dramatic time"
+```{r}
+text.position.v <- seq(1:length(hamlet.word.v))
+```
+
+***   
+#### Find dispersion of "love"  
+```{r}
+love.v <- which(hamlet.word.v == "love")
+love.v
+```
+
+***   
+#### Create inverse vector of all positions with "NA" that are _not_ love
+```{r}
+w.count.v <- rep(NA, length(text.position.v))
+```
+
+***   
+#### Mark all occurrences of "love" = 1
+```{r}
+w.count.v[love.v] <- 1
+```
+
+***   
+#### Plot the matrix
+```{r}
+plot(w.count.v, main="Dispersion Plot of 'love' in Hamlet", xlab="Text Location",
+     ylab="Love", type="h", ylim=c(0,1), yaxt='n')
+```   
+
+***   
+#### Find dispersion of "death"  
+```{r}
+death.v <- which(hamlet.word.v == "death")
+w.count.v <- rep(NA, length(text.position.v))
+w.count.v[death.v] <- 1
+plot(w.count.v, main="Dispersion Plot of 'death' in Hamlet", xlab="Text Location",
+     ylab="Death", type="h", ylim=c(0,1), yaxt='n')
+```
+
+***   
+#### Find dispersion of "heaven"  
+```{r}
+heaven.v <- which(hamlet.word.v == "love")
+w.count.v <- rep(NA, length(text.position.v))
+w.count.v[heaven.v] <- 1
+plot(w.count.v, main="Dispersion Plot of 'heaven' in Hamlet", xlab="Text Location",
+     ylab="Heaven", type="h", ylim=c(0,1), yaxt='n')
+```
+
+***   
+#### Find dispersion of "good"  
+```{r}
+good.v <- which(hamlet.word.v == "good")
+w.count.v <- rep(NA, length(text.position.v))
+w.count.v[good.v] <- 1
+plot(w.count.v, main="Dispersion Plot of 'good' in Hamlet", xlab="Text Location",
+     ylab="Good", type="h", ylim=c(0,1), yaxt='n')
+```
+
+***   
+#### Find dispersion of "father"  
+```{r}
+father.v <- which(hamlet.word.v == "love")
+w.count.v <- rep(NA, length(text.position.v))
+w.count.v[father.v] <- 1
+plot(w.count.v, main="Dispersion Plot of 'father' in Hamlet", xlab="Text Location",
+     ylab="Father", type="h", ylim=c(0,1), yaxt='n')
+```
+
+Acknowledgments: Code adapted from Matthew Jockers’ Text Analysis with R for Students of Literature.

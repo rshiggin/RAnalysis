@@ -1,0 +1,15 @@
+setwd("~/cyberdh/HILT-demo")
+text.v<-scan("hamlet.txt", what="character", sep="\n")
+hamlet.v<-paste(text.v, collapse="  ")
+hamlet.lower.v<-tolower(hamlet.v)
+hamlet.words<-strsplit(hamlet.lower.v, "\\W")
+hamlet.word.v<-unlist(hamlet.words)
+not.blanks.v<-which(hamlet.word.v != "")
+hamlet.word.v<-hamlet.word.v[not.blanks.v]
+length(unique(hamlet.word.v))
+hamlet.freqs.t<-table(hamlet.word.v)
+sorted.hamlet.freqs.t<-sort(hamlet.freqs.t, decreasing=TRUE)
+sorted.hamlet.rel.freqs.t<-100*(sorted.hamlet.freqs.t/sum(sorted.hamlet.freqs.t))
+plot(sorted.hamlet.rel.freqs.t[1:10], type="b", main="Hamlet, Entire Play", xlab="Top Ten Words", 
+     ylab="Percentage of Speech", xaxt="n",)
+axis(1,1:10, labels=names(sorted.hamlet.rel.freqs.t[1:10]))

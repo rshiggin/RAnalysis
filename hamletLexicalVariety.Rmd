@@ -1,0 +1,77 @@
+---
+title: "Hamlet Lexical Variety"
+author: "CyberDH"
+date: "2015"
+output: html_document
+---
+
+***  
+### Global parameters 
+#### Set working directory
+```{r}
+setwd("~/cyberdh/HILT-demo")
+```   
+
+#### Include necessary packages for notebook
+```{r}
+library(knitr)
+library(markdown)
+library(rmarkdown)
+library(ggplot2)
+```   
+
+#### Load data (plaintext file), formatted by line breaks  
+```{r}
+text.v <- scan("hamlet.txt", what="character", sep="\n")
+text.v <- c(text.v, "END")
+```  
+
+***   
+### Prepare text data
+#### Break into chunks by "Act"
+```{r}
+act.positions.v <- grep("^ACT ", text.v)
+last.position.v <- length(text.v)
+act.positions.v <- c(act.positions.v, last.position.v)
+```
+
+***
+### Analysis
+#### Use loop to calculate word type frequency correlations among Acts
+```{r}
+act.raws.l <- list()
+act.freqs.l <- list()
+
+for (i in 1:length(act.positions.v)) {
+  if (i != length(act.positions.v)) {
+    act.number <- text.v[act.positions.v[i]]
+    start <- act.positions.v[i] +1
+    end <- act.positions.v[i+1] -1
+    act.v <- text.v[start:end]
+    act.words.v <- tolower(paste(act.v, collapse= " "))
+    act.words.l <- strsplit(act.words.v, "\\W")
+    act.word.v <- unlist(act.words.l)
+    act.word.v <- act.word.v[which(act.word.v != "")]
+    act.freqs.t <- table(act.word.v)
+    act.raws.l[[act.number]] <- act.freqs.t
+    act.freqs.t.rel <- 100*(act.freqs.t/sum(act.freqs.t))
+    act.freqs.l[[act.number]] <- act.freqs.t.rel
+  }
+}
+```
+
+***   
+#### Save frequency list to matrix object 
+```{r}
+mean.word.use.m <- do.call(rbind, lapply(act.raws.l, mean))
+```
+
+***   
+#### Plot showing only deviations from the mean 
+```{r}
+plot(scale(mean.word.use.m), type="h", main = "Mean Word Usage in Hamlet by Act")
+```    
+
+#### Longer lines or more deviation from mean = more repetition of the same words.   
+
+Acknowledgments: Code adapted from Matthew Jockers’ _Text Analysis with R for Students of Literature_.

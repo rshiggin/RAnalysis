@@ -1,0 +1,109 @@
+---
+title: "Wuthering Heights and Jane Eyre Hapax"
+author: "CyberDH"
+date: "2015"
+output: html_document
+---
+Words that occur just once are often called _singletons_ (or even _onesies_), but they are more formally called _hapax legomena_ (_hapax_, for short). Here, the method measures lexical variety among novel chapters.  
+
+***  
+### Global parameters 
+#### Set working directory
+```{r}
+setwd("~/cyberdh/HILT-demo")
+```   
+
+#### Include necessary packages for notebook
+```{r}
+library(knitr)
+library(markdown)
+library(rmarkdown)
+library(ggplot2)
+```   
+
+***   
+### Jane Eyre Hapax
+#### Prepare text data, broken into chunks by chapter
+```{r}
+text.janeEyre <- scan("janeEyre.txt", what="character", sep="\n")
+text.janeEyre <- c(text.janeEyre, "END")
+positions.janeEyre <- grep("^CHAPTER ", text.janeEyre)
+last.janeEyre <- length(text.janeEyre)
+positions.janeEyre <- c(positions.janeEyre, last.janeEyre)
+```
+
+#### Loop for calculating unique words by chapter 
+```{r}
+rawsl.janeEyre <- list()
+freqsl.janeEyre <- list()
+for (i in 1:length(positions.janeEyre)) {
+  if (i != length(positions.janeEyre)) {
+    number.janeEyre <- text.janeEyre[positions.janeEyre[i]]
+    start.janeEyre <- positions.janeEyre[i] +1
+    end.janeEyre <- positions.janeEyre[i+1] -1
+    chapter.janeEyre <- text.janeEyre[start.janeEyre:end.janeEyre]
+    wordsv.janeEyre <- tolower(paste(chapter.janeEyre, collapse= " "))
+    wordsl.janeEyre <- strsplit(wordsv.janeEyre, "\\W")
+    wordv.janeEyre <- unlist(wordsl.janeEyre)
+    wordv.janeEyre <- wordv.janeEyre[which(wordv.janeEyre != "")]
+    freqst.janeEyre <- table(wordv.janeEyre)
+    rawsl.janeEyre[[number.janeEyre]] <- freqst.janeEyre
+    freqst.rel.janeEyre <- 100*(freqst.janeEyre/sum(freqst.janeEyre))
+    freqsl.janeEyre[[number.janeEyre]] <- freqst.rel.janeEyre
+  }
+}
+```
+
+***
+#### Create barplot
+```{r}
+hapaxv.janeEyre <- sapply(rawsl.janeEyre, function(x) sum(x == 1))
+lengthsm.janeEyre <- do.call(rbind, lapply(rawsl.janeEyre,sum))
+percentage.janeEyre <- hapaxv.janeEyre / lengthsm.janeEyre
+barplot(percentage.janeEyre, beside = T, col="grey", main="Hapax by Chapter in Jane Eyre",names.arg=seq(1:length(rawsl.janeEyre)))
+```
+
+***   
+### Wuthering Heights Hapax
+#### Prepare text data, broken into chunks by chapter
+```{r}
+text.wutheringHeights <- scan("wutheringHeights.txt", what="character", sep="\n")
+text.wutheringHeights <- c(text.wutheringHeights, "END")
+positions.wutheringHeights <- grep("^CHAPTER ", text.wutheringHeights)
+last.wutheringHeights <- length(text.wutheringHeights)
+positions.wutheringHeights <- c(positions.wutheringHeights, last.wutheringHeights)
+```
+
+#### Loop for calculating unique words by chapter 
+```{r}
+rawsl.wutheringHeights <- list()
+freqsl.wutheringHeights <- list()
+for (i in 1:length(positions.wutheringHeights)) {
+  if (i != length(positions.wutheringHeights)) {
+    number.wutheringHeights <- text.wutheringHeights[positions.wutheringHeights[i]]
+    start.wutheringHeights <- positions.wutheringHeights[i] +1
+    end.wutheringHeights <- positions.wutheringHeights[i+1] -1
+    chapter.wutheringHeights <- text.wutheringHeights[start.wutheringHeights:end.wutheringHeights]
+    wordsv.wutheringHeights <- tolower(paste(chapter.wutheringHeights, collapse= " "))
+    wordsl.wutheringHeights <- strsplit(wordsv.wutheringHeights, "\\W")
+    wordv.wutheringHeights <- unlist(wordsl.wutheringHeights)
+    wordv.wutheringHeights <- wordv.wutheringHeights[which(wordv.wutheringHeights != "")]
+    freqst.wutheringHeights <- table(wordv.wutheringHeights)
+    rawsl.wutheringHeights[[number.wutheringHeights]] <- freqst.wutheringHeights
+    freqst.rel.wutheringHeights <- 100*(freqst.wutheringHeights/sum(freqst.wutheringHeights))
+    freqsl.wutheringHeights[[number.wutheringHeights]] <- freqst.rel.wutheringHeights
+  }
+}
+```
+
+***
+#### Create barplot
+```{r}
+hapaxv.wutheringHeights <- sapply(rawsl.wutheringHeights, function(x) sum(x == 1))
+lengthsm.wutheringHeights <- do.call(rbind, lapply(rawsl.wutheringHeights,sum))
+percentage.wutheringHeights <- hapaxv.wutheringHeights / lengthsm.wutheringHeights
+barplot(percentage.wutheringHeights, beside = T, col="grey", main="Hapax by Chapter in Wuthering Heights",names.arg=seq(1:length(rawsl.wutheringHeights)))
+```
+
+
+Acknowledgments: Code adapted from Matthew Jockers’ _Text Analysis with R for Students of Literature_.

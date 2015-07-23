@@ -1,0 +1,110 @@
+---
+title: "Hamlet Hapax"
+author: "CyberDH"
+date: "2015"
+output: html_document
+---
+Words that occur just once are often called _singletons_ (or even _onesies_), but they are more formally called _hapax legomena_ (_hapax_, for short). Here, the method measures lexical variety among play characters and scenes.  
+
+***  
+### Global parameters 
+```{r}
+setwd("~/cyberdh/HILT-demo")
+library(knitr)
+library(markdown)
+library(rmarkdown)
+library(ggplot2)
+```   
+
+***   
+### Hamlet hapax by character
+#### Prepare text data, broken into chunks by character
+```{r}
+playText.s <- scan("hamletCharacters.txt", what="character", sep="\n")
+playText.s <- unlist(playText.s)
+characterSegments <- grep("^CHARACTER", playText.s)
+segmentsEnd <-  length(playText.s)
+characterSegments  <-  c(characterSegments , segmentsEnd)
+```
+
+***
+#### Use loop to calculate word type frequency correlations among segments
+```{r}
+segmentFreq <- list()
+segmentsRaw <- list()
+for(i in 1:length(characterSegments)){
+  if(i != length(characterSegments)){
+    segmentsbyTitle <- playText.s[characterSegments[i]]
+    start.segments <- characterSegments[i]+1
+    end.segments <- characterSegments[i+1]-1
+    segmentLines <- playText.s[start.segments:end.segments]
+    segmentWords <- tolower(paste(segmentLines, collapse=" "))
+    segmentsStrsplit <- strsplit(segmentWords, "\\W")
+    segmentWords <- unlist(segmentsStrsplit)
+    segmentWords <- segmentWords[which(segmentWords!="")] 
+    segmentTable <- table(segmentWords)
+    segmentsRaw[[segmentsbyTitle]] <-  segmentTable
+    segmentTable.rel <- 100*(segmentTable/sum(segmentTable))
+    segmentFreq[[segmentsbyTitle]] <- segmentTable.rel
+  }
+}
+``` 
+
+***                 
+#### Calculate and plot unique word usage   
+```{r}
+segmentHapax <- sapply(segmentsRaw, function(x) sum(x == 1))
+segmentHapax
+segment.lengths.m <- do.call(rbind, lapply(segmentsRaw,sum))
+hapax.percentage <- segmentHapax / segment.lengths.m
+barplot(hapax.percentage, beside=T,col="grey", names.arg = seq(1:length(segmentsRaw)))
+```    
+
+
+***   
+### Hamlet hapax by scene
+#### Prepare text data, broken into chunks by scene
+```{r}
+playText.a <- scan("hamlet.txt", what="character", sep="\n")
+playText.a <- unlist(playText.a)
+scene.positions.v <- grep("^Scene", playText.a)
+last.position.v <- length(playText.a)
+scene.positions.v <- c(scene.positions.v, last.position.v)
+```
+
+***
+#### Use loop to calculate word type frequency correlations among scenes
+```{r}
+scene.raws.l <- list()
+scene.freqs.l <- list()
+
+for (i in 1:length(scene.positions.v)) {
+  if (i != length(scene.positions.v)) {
+    scene.number <- playText.a[scene.positions.v[i]]
+    start.positions <- scene.positions.v[i] +1
+    end.positions <- scene.positions.v[i+1] -1
+    scene.v <- playText.a[start.positions:end.positions]
+    scene.words.v <- tolower(paste(scene.v, collapse= " "))
+    scene.words.l <- strsplit(scene.words.v, "\\W")
+    scene.word.v <- unlist(scene.words.l)
+    scene.word.v <- scene.word.v[which(scene.word.v != "")]
+    scene.freqs.t <- table(scene.word.v)
+    scene.raws.l[[scene.number]] <- scene.freqs.t
+    scene.freqs.t.rel <- 100*(scene.freqs.t/sum(scene.freqs.t))
+    scene.freqs.l[[scene.number]] <- scene.freqs.t.rel
+  }
+}
+```
+
+***                 
+#### Calculate and plot unique word usage   
+```{r}
+hamletHapax <- sapply(scene.raws.l, function(x) sum(x == 1))
+hamletHapax
+scene.lengths.m <- do.call(rbind, lapply(scene.raws.l,sum))
+scene.percentage <- hamletHapax / scene.lengths.m
+barplot(scene.percentage, beside=T,col="grey", names.arg = seq(1:length(scene.raws.l)))
+```    
+
+
+Acknowledgments: Code adapted from Matthew Jockers’ _Text Analysis with R for Students of Literature_.
