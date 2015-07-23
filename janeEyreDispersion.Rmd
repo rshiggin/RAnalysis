@@ -1,9 +1,4 @@
----
-title: "Jane Eyre Dispersion"
-author: "CyberDH"
-date: "2015"
-output: html_document
----
+## Jane Eyre Dispersion   
 
 ***  
 ### Global parameters 
