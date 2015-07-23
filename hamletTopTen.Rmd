@@ -1,9 +1,4 @@
----
-title: "Hamlet Top Ten Words"
-author: "CyberDH"
-date: "2015"
-output: html_document
----
+## Hamlet Top Ten Words
 
 ***  
 ### Global parameters 
