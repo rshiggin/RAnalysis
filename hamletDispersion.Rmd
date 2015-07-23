@@ -1,9 +1,4 @@
----
-title: "Hamlet Dispersion"
-author: "CyberDH"
-date: "2015"
-output: html_document
----
+## Hamlet Dispersion
 
 ***  
 ### Global parameters 
